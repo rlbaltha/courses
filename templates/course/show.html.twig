@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Course{% endblock %}
+
+{% block body %}
+        <h2 class="cmp-heading-2" style="margin-top: 1em !important;">{{ course.coursename }}: {{ course.title }} ({{ course.callnumber }})</h2>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="cmp-button" href="{{ path('course_edit', {'id': course.id}) }}">Edit Course</a>
+        {% endif %}
+    <p>{{ course.instructorname }}</p>
+    <p>{{ course.days }}
+                    {% if course.time == 'TBA'%}TBA{% elseif course.time > 0 %}
+                        {% if course.time|slice(0,2) > 12 %}{{ course.time|slice(0,2) - 12}}
+                        {% else %}{{ course.time|slice(0,2)|number_format}}{% endif %}:{{ course.time|slice(2,2)}}{% if course.time|slice(0,2) > 11 %} PM{% else %} AM{% endif %}
+                    {% else %}
+                    {% endif %}</p>
+    <p>{% if course.building=='Zell B Miller Learning Center' %}MLC{% else %}{{ course.building }}{% endif %}
+        {% if course.room=='NCRR' %}{% else %}{{ course.room }}{% endif %}</p>
+
+    <hr/>
+        {% for description in descriptions %}
+            {{ description.body|raw }}
+            {% if is_granted('ROLE_EDITOR') and name==course.instructorname %}
+            <a class="cmp-button" href="{{ path('description_edit', {'id': description.id, 'courseid': course.id}) }}">Update Description</a>
+            <a class="cmp-button" href="{{ path('user_home') }}">My Courses</a>
+            {% endif %}
+            <hr/>
+        {% else %}
+            No Description for this Course.
+            {% if is_granted('ROLE_EDITOR') and name==course.instructorname %}
+            <a class="cmp-button" href="{{ path('description_new', {'course': course.id}) }}">Add Description</a>
+            <a class="cmp-button" href="{{ path('user_home') }}">My Courses</a>
+            {% endif %}
+        {% endfor %}
+
+{% endblock %}

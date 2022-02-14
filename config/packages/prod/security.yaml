@@ -1,0 +1,38 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+
+    providers:
+        cas:
+          id: App\Service\SSOUserProvider
+
+    firewalls:
+        main:
+            anonymous: ~
+
+            guard:
+                authenticators:
+                    - prayno.cas_authenticator
+            logout:
+                path: /logout
+                success_handler: PRayno\CasAuthBundle\Event\LogoutSuccessHandler
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            switch_user: true
+
+    role_hierarchy:
+            ROLE_INTERN:  ROLE_USER
+            ROLE_ADMIN: [ROLE_INTERN, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+         - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/user, roles: ROLE_USER }
+         - { path: ^/term, roles: ROLE_ADMIN }
+         - { path: ^/description, roles: ROLE_USER }
+

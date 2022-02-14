@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Description{% endblock %}
+
+{% block body %}
+    <h1>Edit Description</h1>
+
+    {{ include('description/_form.html.twig', {'button_label': 'Update'}) }}
+
+    {{ include('description/_delete_form.html.twig') }}
+
+{% endblock %}

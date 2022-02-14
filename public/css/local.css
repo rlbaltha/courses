@@ -1,0 +1,36 @@
+body {
+
+  }
+
+.cmp-site-title__logo {
+    width: auto;
+    min-height: 145px;
+    padding: 1em;
+}
+
+.cmp-header {
+    min-height: 180px;
+    display: block;
+}
+
+.cmp-nav__link {
+   font-size: 1.25rem;
+    font-family: 'Oswald', sans-serif !important;
+    padding: .75em;
+}
+
+
+h1 {
+    margin: 1em;
+    margin-top: .5em !important;
+    font-size: 2.5em !important;
+}
+h2 {
+    margin: 1em;
+    margin-top: .5em !important;
+    font-size: 2em !important;
+}
+
+table {
+    margin: 2rem;
+}

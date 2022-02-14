@@ -1,19 +1,176 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="application-name" content="University of Georgia">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://design.online.uga.edu/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://design.online.uga.edu/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://design.online.uga.edu/favicon/favicon-16x16.png">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <title>{% block title %}UGA English Courses{% endblock %}</title>
+    {# local #}
+    <link rel="stylesheet" href="https://design.online.uga.edu/css/base.css">
+    <link type="text/css" rel="stylesheet" href="{{ asset('css/local.css') }}">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+<header class="cmp-header">
+    <div class="cmp-header__title-bar">
+        <div class="cmp-title-bar">
+            <div class="cmp-site-title">
+                <a href="https://www.english.uga.edu/" class="cmp-site-title__link">
+                    <img src="https://www.english.uga.edu/sites/default/files/Print-ENG-A%26S-H-FC_0.png"
+                         class="cmp-site-title__logo" alt="English Department"/>
+                </a>
+            </div>
+
+            <div class="cmp-title-bar__features">
+                <button class="cmp-title-bar__menu-toggle js-menu-open">
+                    <svg viewBox="0 0 16 14" class="cmp-title-bar__menu-icon">
+                        <path d="M1,1 15,1 M1,7 15,7 M1,13 15,13"/>
+                    </svg>
+                    Menu
+                </button>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<div class="cmp-nav js-menu">
+    <nav>
+        <div class="cmp-nav__actions">
+            <button class="cmp-nav__close js-menu-close">
+                <svg class="cmp-nav__close-icon" viewBox="0 0 16 16">
+                    <path d="M1,1 15,15 M 1,15, 15,1"/>
+                </svg>
+                Close
+            </button>
+
+            <a href="/" class="cmp-nav__title icon-shield">English Department</a>
+        </div>
+
+        {% if termname is defined %}
+            {% set currentterm = termname.term %}
+        {% else %}
+            {% set currentterm = 'current' %}
+        {% endif %}
+
+        <ul class="cmp-nav__list">
+            <li class="cmp-nav__item">
+                <a class="cmp-nav__link" href="http://www.english.uga.edu/first-year-composition">PROGRAMS</a>
+            </li>
+            <li class="cmp-nav__item">
+                <div class="cmp-nav__subnav-actions">
+                    <a class="cmp-nav__link" href="{{ path('course_upper', {'area': 'U', 'term': currentterm}) }}">
+                        COURSES
+                    </a>
+                    <button class="cmp-nav__toggle js-subnav" id="courses"
+                            data-icon-expanded="icon-up-arrow" data-icon-hidden="icon-down-arrow">
+                <span class="util-visually-hidden">
+                  Open Navigation
+                </span>
+                    </button>
+
+                </div>
+                <ul class="cmp-subnav" aria-labelledby="courses">
+                    <li>
+                        <a class="cmp-subnav__link"
+                           href="{{ path('course_area', {'area': 'A', 'term': currentterm}) }}">COMPOSITION</a>
+                    </li>
+                    <li>
+                        <a class="cmp-subnav__link"
+                           href="{{ path('course_area', {'area': 'B', 'term': currentterm}) }}">SOPHOMORE
+                            SURVEYS</a>
+                    </li>
+                    <li>
+                        <a class="cmp-subnav__link"
+                           href="{{ path('course_upper', {'area': 'U', 'term': currentterm}) }}">UPPER</a>
+                    </li>
+                    <li>
+                        <a class="cmp-subnav__link"
+                           href="{{ path('course_area', {'area': 'G', 'term': currentterm}) }}">GRADUATE</a>
+                    </li>
+                    <hr/>
+                    <li>
+                        <a class="cmp-subnav__link"
+                           href="#">Change Term</a>
+
+                    </li>
+
+                    {% if terms is defined %}
+                        {% for term in terms %}
+                            <li>
+                                <a class="cmp-subnav__link"
+                                   href="{{ path('course_upper', {'area': 'U', 'term': term.term }) }}">{{ term.termname }}</a>
+
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                    <hr/>
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+
+                        <li>
+                            <a class="cmp-subnav__link"
+                               href="{{ path('user_home') }}">MY COURSES</a>
+                        </li>
+
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <li>
+                                <a class="cmp-subnav__link"
+                                   href="{{ path('term_index') }}">TERMS</a>
+                            </li>
+                            <li>
+                                <a class="cmp-subnav__link"
+                                   href="{{ path('user_index') }}">USERS</a>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a class="cmp-subnav__link" href="{{ path('app_logout') }}">
+                                LOGOUT
+                            </a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a class="cmp-subnav__link"
+                               href="{{ path('user_home') }}">LOG IN</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li class="cmp-nav__item">
+
+                <a class="cmp-nav__link" href="http://www.english.uga.edu/directory/graduate-faculty">PEOPLE</a>
+
+            </li>
+            <li class="cmp-nav__item">
+
+                <a class="cmp-nav__link" href="http://www.english.uga.edu/news/all">NEWS</a>
+
+            </li>
+            <li class="cmp-nav__item">
+
+                <a class="cmp-nav__link" href="http://www.english.uga.edu/events/all">EVENTS</a>
+
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div class="obj-grid obj-content-width">
+    <div class="obj-grid__full">
+        <div class="util-scrollable-content">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+<script src="https://design.online.uga.edu/js/scripts.js"></script>
+<script>
+    $(document).ready(function () {
+    });
+</script>
+{% block javascripts %}{% endblock %}
+</body>
 </html>

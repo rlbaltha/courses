@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}English:  {{ user.firstname }} {{ user.lastname }}'s Courses{% endblock %}
+
+{% block body %}
+
+        <h2 class="cmp-heading-2" style="margin-top: 1em !important;">{{ user.firstname }} {{ user.lastname }}'s Courses</h2>
+        <a class="cmp-button" href="{{ path('user_edit', {'id': user.id}) }}">Edit Name</a>
+        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+            <a class="cmp-button" href="{{ path('user_index', {'_switch_user': '_exit'}) }}">Exit Login As</a>
+        {% endif %}
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Term</th>
+                <th>Coursename</th>
+                <th>Title</th>
+                <th>Callnumber</th>
+                <th>Time</th>
+                <th>Building</th>
+                <th>Room</th>
+                <th>Days</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for course in courses %}
+                <tr>
+                    <td>{{ course.term }}</td>
+                    <td><a href="{{ path('course_show', {'id': course.id}) }}">{{ course.coursename }}</a></td>
+                    <td>{{ course.title }}</td>
+                    <td>{{ course.callnumber }}</td>
+                    <td>{{ course.time }}</td>
+                    <td>{{ course.building }}</td>
+                    <td>{{ course.room }}</td>
+                    <td>{{ course.days }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="14">No Courses Found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+    <h2>{{ user.firstname }} {{ user.lastname }}'s Descriptions</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Course</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for description in user.descriptions %}
+            <tr>
+                <td><a href="{{ path('description_show', {'id': description.id}) }}">For {{ description.course }}</a></td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

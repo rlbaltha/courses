@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Course index{% endblock %}
+
+{% block body %}
+
+    <nav style=" margin-top: 2em">
+        <ol class="cmp-breadcrumbs">
+            <li class="cmp-breadcrumbs__item">
+                <a class="cmp-breadcrumbs__link" data-title="Home" href="http://www.english.uga.edu">English Department</a>
+            </li>
+            <li class="cmp-breadcrumbs__item">
+                <a class="cmp-breadcrumbs__link" data-title="Resources" href="/">Courses</a>
+            </li>
+            <li class="cmp-breadcrumbs__item cmp-breadcrumbs__item--current">
+                <a class="cmp-breadcrumbs__link" aria-current="page" href="#">{% if termname is defined %}<td>{{ termname.termname }}</td>{% endif %}</a>
+            </li>
+        </ol>
+    </nav>
+
+<div class="util-scrollable-content">
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">Course</th>
+                <th scope="col">Title</th>
+                <th scope="col">Instructor</th>
+                <th scope="col">CRN</th>
+                <th scope="col">Days</th>
+                <th scope="col">Time</th>
+                <th scope="col">Room</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for course in courses %}
+                <tr>
+                    <th scope="row"><a href="{{ path('course_show', {'id': course.id}) }}">{{ course.coursename }}</a></th>
+                    <td>{{ course.title }}</td>
+                    <td>{{ course.instructorname }}</td>
+                    <td>{{ course.callnumber }}</td>
+                    <td>{{ course.days }}</td>
+                    <td>
+                        {% if course.time == 'TBA'%}TBA{% elseif course.time > 0 %}
+                            {% if course.time|slice(0,2) > 12 %}{{ course.time|slice(0,2) - 12}}
+                            {% else %}{{ course.time|slice(0,2)|number_format}}{% endif %}:{{ course.time|slice(2,2)}}{% if course.time|slice(0,2) > 11 %} PM{% else %} AM{% endif %}
+                        {% else %}
+                        {% endif %}
+                    </td>
+                    <td>{% if course.building=='Zell B Miller Learning Center' %}MLC{% else %}{{ course.building }}{% endif %}
+                        {% if course.room=='NCRR' %}{% else %}{{ course.room }}{% endif %}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">No Courses Found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script language="javascript">
+    $(document).ready(function () {
+    });
+</script>
+{% endblock %}
