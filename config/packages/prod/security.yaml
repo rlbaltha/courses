@@ -16,7 +16,7 @@ security:
                     - prayno.cas_authenticator
             logout:
                 path: /logout
-                success_handler: PRayno\CasAuthBundle\Event\LogoutSuccessHandler
+#                success_handler: PRayno\CasAuthBundle\Event\LogoutSuccessHandler
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
